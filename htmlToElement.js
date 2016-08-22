@@ -13,8 +13,13 @@ var Image = require('./helper/Image')
 var LINE_BREAK = ''
 var PARAGRAPH_BREAK = ''
 var BULLET = '\u2022 '
+var LIST_INDEX = 1
+var LIST_RESET = 1
 
 function htmlToElement(rawHtml, opts, done) {
+
+    LIST_INDEX = LIST_RESET
+
     function domToElement(dom, parent) {
         if (!dom) return null
 
@@ -67,7 +72,7 @@ function htmlToElement(rawHtml, opts, done) {
                 return (
                     <Text key={index} onPress={linkPressHandler}>
                         {node.name == 'pre' ? LINE_BREAK : null}
-                        {node.name == 'li' ? BULLET : null}
+                        {node.name == 'li' ? olUl(node) : null}
                         {domToElement(node.children, node)}
                         {node.name == 'br' || node.name == 'li' ? LINE_BREAK : null}
                         {node.name == 'p' && index < list.length - 1 ? PARAGRAPH_BREAK : null}
@@ -76,6 +81,24 @@ function htmlToElement(rawHtml, opts, done) {
                 )
             }
         })
+    }
+
+    function olUl(el) {
+
+        var parentEl = el.parent
+        var result = ''
+
+        if (parentEl !== null) {
+
+            if (parentEl.name === 'ol') {
+                result = `${LIST_INDEX++}. `
+            }
+            else {
+                result = BULLET
+            }
+        }
+
+        return result
     }
 
     function inheritedStyle(parent) {
