@@ -65,6 +65,39 @@ function htmlToElement(rawHtml, opts, done) {
                     )
                 }
 
+                if (node.name == 'table' || node.name == 'tbody') {
+
+                    node.children.data = '' // trim tabs from WYSIWYG
+
+                    return (
+                        <View key={index}>
+                            {domToElement(node.children,node)}
+                        </View>
+                    )
+                }
+
+                if (node.name == 'tr') {
+
+                    return (
+                        <View
+                            key={index}
+                            style={{backgroundColor: 'rgba(0, 0, 0, .1)', flexDirection: 'row', marginTop: 1}}>
+                            {domToElement(node.children,node)}
+                        </View>
+                    )
+                }
+
+                if (node.name == 'td' || node.name == 'th') {
+
+                    return (
+                        <View
+                            key={index}
+                            style={{padding: 3, flex: 1}}>
+                            {domToElement(node.children,node)}
+                        </View>
+                    )
+                }
+
                 var linkPressHandler = null
                 if (node.name == 'a' && node.attribs && node.attribs.href) {
                     linkPressHandler = () => opts.linkHandler(entities.decodeHTML(node.attribs.href))
