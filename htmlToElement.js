@@ -4,13 +4,16 @@ var htmlparser = require('./vendor/htmlparser2')
 var entities = require('./vendor/entities')
 
 var {
+    Dimensions,
     Text,
+    View
 } = ReactNative
 
 var Image = require('./helper/Image')
 
-var LINE_BREAK = ''
-var PARAGRAPH_BREAK = ''
+const {width} = Dimensions.get('window')
+
+var LINE_BREAK = '\n'
 var BULLET = '\u2022 '
 var LIST_INDEX = 1
 var LIST_RESET = 1
@@ -27,7 +30,6 @@ function htmlToElement(rawHtml, opts, done) {
                 var rendered = opts.customRenderer(node, index, list)
                 if (rendered || rendered === null) return rendered
             }
-
 
             if (node.type == 'text') {
 
@@ -69,17 +71,42 @@ function htmlToElement(rawHtml, opts, done) {
                 }
 
                 return (
-                    <Text key={index} onPress={linkPressHandler}>
+                    <Text
+                        key={index}
+                        onPress={linkPressHandler}
+                        style={{
+                            marginBottom: getMargin(node.name),
+                            marginTop: node.name == 'p' ? 0 : getMargin(node.name)
+                        }}>
                         {node.name == 'pre' ? LINE_BREAK : null}
                         {node.name == 'li' ? olUl(node) : null}
-                        {domToElement(node.children, node)}
-                        {node.name == 'br' || node.name == 'li' ? LINE_BREAK : null}
-                        {node.name == 'p' && index < list.length - 1 ? PARAGRAPH_BREAK : null}
-                        {node.name == 'h1' || node.name == 'h2' || node.name == 'h3' || node.name == 'h4' || node.name == 'h5' ? LINE_BREAK : null}
+                        {domToElement(node.children,node)}
+                        {node.name == 'li' ? LINE_BREAK : null}
+                        {node.name == 'br' && index < list.length - 1 ? LINE_BREAK : null}
                     </Text>
                 )
             }
         })
+    }
+
+    function getMargin(elName) {
+
+        switch (elName) {
+            case 'h1':
+                return 16
+            case 'h2':
+                return 12
+            case 'h3':
+                return 9
+            case 'h4':
+                return 9
+            case 'h5':
+                return 7
+            case 'p':
+                return 7
+            default:
+                return 1
+        }
     }
 
     function olUl(el) {
