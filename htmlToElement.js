@@ -103,14 +103,21 @@ function htmlToElement(rawHtml, opts, done) {
                     linkPressHandler = () => opts.linkHandler(entities.decodeHTML(node.attribs.href))
                 }
 
+                var p_style = {
+                    lineHeight: 21
+                }
+
                 return (
                     <Text
                         key={index}
                         onPress={linkPressHandler}
-                        style={{
-                            marginBottom: getMargin(node.name),
-                            marginTop: node.name == 'p' ? 0 : getMargin(node.name)
-                        }}>
+                        style={[
+                            {
+                                marginBottom: getMargin(node.name),
+                                marginTop: node.name == 'p' ? 0 : getMargin(node.name)
+                            },
+                            node.name == 'p' ? p_style : null
+                        ]}>
                         {node.name == 'pre' ? LINE_BREAK : null}
                         {node.name == 'li' ? olUl(node) : null}
                         {domToElement(node.children,node)}
