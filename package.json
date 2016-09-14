@@ -1,5 +1,5 @@
 {
-  "name": "react-native-htmlview",
+  "name": "@lotto-nz/react-native-htmlview",
   "version": "0.6.0",
   "description": "A component which renders HTML content as native views",
   "main": "index.js",
