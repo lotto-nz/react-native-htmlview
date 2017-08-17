@@ -1,6 +1,6 @@
 {
   "name": "@lotto-nz/react-native-htmlview",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "A component which renders HTML content as native views",
   "main": "index.js",
   "scripts": {
