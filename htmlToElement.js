@@ -65,7 +65,7 @@ function htmlToElement(rawHtml, opts, done) {
                     )
                 }
 
-                if (node.name == 'table' || node.name == 'tbody') {
+                if (node.name == 'table' || node.name == 'tbody' || node.name == 'thead') {
 
                     node.children.data = '' // trim tabs from WYSIWYG
 
